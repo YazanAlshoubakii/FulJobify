@@ -87,7 +87,19 @@ app.delete('/api/v1/jobs/:id', (req, res) => {
   res.status(200).json({ msg: 'job is Deleted' });
 });
 
+// Not Found Route
+app.use('*', (req, res) => {
+  res.status(404).json({ msg: 'Not Found!' });
+});
+
+//Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).json({ msg: 'Something Went Wrong' });
+});
+
 const port = process.env.PORT || 5100;
+
 app.listen(port, () => {
   console.log('Server Running...');
 });
