@@ -1,12 +1,12 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-
 // Routers
 import jobRouter from './routes/jobRouter.js';
 
 const app = express();
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -24,6 +24,7 @@ app.post('/', (req, res) => {
 
 // Job Router
 app.use('/api/v1/jobs', jobRouter);
+
 // Not Found Route
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'Not Found!' });
@@ -37,6 +38,12 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 5100;
 
-app.listen(port, () => {
-  console.log('Server Running...');
-});
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`Server Running on PORT ${port}...`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
