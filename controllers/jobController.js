@@ -1,26 +1,24 @@
 import JobModel from '../models/JobModel.js';
-
+import { StatusCodes } from 'http-status-codes';
+import { NotFoundError } from '../errors/customErrors.js';
 export const getAllJobs = async (req, res) => {
   const jobs = await JobModel.find({});
-  res.status(200).json({ jobs });
+  res.status(StatusCodes.OK).json({ jobs });
 };
 
 export const createJob = async (req, res) => {
   const { company, position } = req.body;
-  const job = await JobModel.create({ company, position });
-  res.status(201).json({ job });
+  const jobs = await JobModel.create({ company, position });
+  res.status(StatusCodes.CREATED).json({ jobs });
 };
 
 export const getOneJob = async (req, res) => {
   const { id } = req.params;
   const job = await JobModel.findById(id);
-  console.log(job);
 
-  if (!job) {
-    res.status(404).json({ msg: `no job with this id ${id}` });
-    return;
-  }
-  res.status(200).json({ job });
+  if (!job) throw new NotFoundError(`no job with this id ${id}`);
+
+  res.status(StatusCodes.OK).json({ job });
 };
 
 export const editJob = async (req, res) => {
@@ -28,21 +26,15 @@ export const editJob = async (req, res) => {
   const updatedJob = await JobModel.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-  if (!updatedJob) {
-    res.status(404).json({ msg: `no job with this id ${id}` });
-    return;
-  }
+  if (!updatedJob) throw new NotFoundError(`no job with this id ${id}`);
 
-  res.status(200).json({ msg: 'job modified', updatedJob });
+  res.status(StatusCodes.OK).json({ msg: 'job modified', updatedJob });
 };
 
 export const deleteJob = async (req, res) => {
   const { id } = req.params;
   const removedJob = await JobModel.findByIdAndDelete(id);
-  if (!removedJob) {
-    res.status(404).json({ msg: `no job with this id ${id}` });
-    return;
-  }
+  if (!removedJob) throw new NotFoundError(`no job with this id ${id}`);
 
-  res.status(200).json({ msg: 'job is Deleted', job: removedJob });
+  res.status(StatusCodes.OK).json({ msg: 'job is Deleted', job: removedJob });
 };

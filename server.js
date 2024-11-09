@@ -2,8 +2,12 @@ import 'express-async-errors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+
 // Routers
 import jobRouter from './routes/jobRouter.js';
+
+// Middlewares
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 
 const app = express();
 import morgan from 'morgan';
@@ -32,10 +36,7 @@ app.use('*', (req, res) => {
 });
 
 //Error Handling Middleware
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ msg: 'Something Went Wrong' });
-});
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5100;
 
