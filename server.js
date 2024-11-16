@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 
+import { validateTest } from './middleware/validationMiddleware.js';
+
 // Routers
 import jobRouter from './routes/jobRouter.js';
 
@@ -23,8 +25,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/', (req, res) => {
-  res.json({ message: 'data received', data: { message: req.body } });
+app.post('/api/v1/test', validateTest, (req, res) => {
+  const { name } = req.body;
+  res.json({ message: `Hello ${name}!` });
 });
 
 // Job Router
