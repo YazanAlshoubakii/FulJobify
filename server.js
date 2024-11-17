@@ -7,6 +7,7 @@ import { validateTest } from './middleware/validationMiddleware.js';
 
 // Routers
 import jobRouter from './routes/jobRouter.js';
+import authRouter from './routes/authRouter.js';
 
 // Middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -32,6 +33,9 @@ app.post('/api/v1/test', validateTest, (req, res) => {
 
 // Job Router
 app.use('/api/v1/jobs', jobRouter);
+
+// Auth Router
+app.use('/api/v1/auth', authRouter);
 
 // Not Found Route
 app.use('*', (req, res) => {
