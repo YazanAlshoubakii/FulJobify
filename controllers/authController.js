@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/UserModel.js';
-import bcrypt from 'bcryptjs';
 import { hashPassword } from '../utils/passwordUtils.js';
 
 export const register = async (req, res) => {
