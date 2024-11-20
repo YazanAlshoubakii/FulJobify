@@ -2,6 +2,7 @@ import 'express-async-errors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+import cookieParser from 'cookie-parser';
 
 import { validateTest } from './middleware/validationMiddleware.js';
 
@@ -11,6 +12,7 @@ import authRouter from './routes/authRouter.js';
 
 // Middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 const app = express();
 import morgan from 'morgan';
@@ -20,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -32,7 +35,7 @@ app.post('/api/v1/test', validateTest, (req, res) => {
 });
 
 // Job Router
-app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/jobs', authenticateUser, jobRouter);
 
 // Auth Router
 app.use('/api/v1/auth', authRouter);
