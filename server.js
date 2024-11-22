@@ -26,8 +26,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cookieParser());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get('/api/v1/test', (req, res) => {
+  res.json({ msg: 'test route' });
 });
 
 app.post('/api/v1/test', validateTest, (req, res) => {
