@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+
   // const errors = { msg: '' };
   // if (data.password.length < 3) {
   //   errors.msg = 'password too short';
