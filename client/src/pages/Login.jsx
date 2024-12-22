@@ -7,6 +7,12 @@ import { toast } from 'react-toastify';
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+  // const errors = { msg: '' };
+  // if (data.password.length < 3) {
+  //   errors.msg = 'password too short';
+  //   return errors;
+  // }
+
   try {
     await customFetch.post('/auth/login', data);
     toast.success('Login Successful');
@@ -20,11 +26,14 @@ export const action = async ({ request }) => {
 const Login = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
+
+  // const errors = useActionData();
   return (
     <Wrapper>
       <Form method="post" className="form">
         <Logo />
         <h4>Login</h4>
+        {/* {errors?.msg && <p style={{ color: 'red' }}>{errors.msg}</p>} */}
         <FormRow type="email" name="email" defaultValue="yazan@gmail.com" />
         <FormRow type="password" name="password" defaultValue="123456" />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
